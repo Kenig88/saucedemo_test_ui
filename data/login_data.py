@@ -1,7 +1,7 @@
 import os
 
 
-class Login:
+class Username:
     STANDARD_USER = os.getenv("STANDARD_USER")
     LOCKED_OUT_USER = os.getenv("LOCKED_OUT_USER") # заблокированный пользователь, сообщение "BLOCKED_USER"
     PROBLEM_USER = os.getenv("PROBLEM_USER")

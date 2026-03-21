@@ -10,12 +10,14 @@ class LoginPage(BasePage):
         super().__init__(driver, url=Links.LOGIN_PAGE)
 
     # локаторы
+
     USERNAME = (By.ID, "user-name")
     PASSWORD = (By.ID, "password")
     LOGIN_BUTTON = (By.ID, "login-button")
     ERROR_MESSAGE = (By.XPATH, "//h3[@data-test='error']")
 
     # методы
+
     def is_opened(self):
         assert self.wait.until(EC.url_to_be(Links.LOGIN_PAGE))
 
