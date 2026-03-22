@@ -1,5 +1,4 @@
 from selenium.webdriver.common.by import By
-
 from data.links import Links
 from pages.base_page import BasePage
 
@@ -20,7 +19,8 @@ class CartPage(BasePage):
     def _get_cart_item(self, product_name: str):
         locator = (
             By.XPATH,
-            f"//div[contains(@class, 'cart_item')][.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
+            f"//div[contains(@class, 'cart_item')]"
+            f"[.//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']]"
         )
         return self.find(locator)
 
@@ -28,6 +28,13 @@ class CartPage(BasePage):
         cart_item = self._get_cart_item(product_name)
         button = cart_item.find_element(By.TAG_NAME, "button")
         button.click()
+
+    def open_product_details(self, product_name: str) -> None:
+        locator = (
+            By.XPATH,
+            f"//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']"
+        )
+        self.click(locator)
 
     def click_continue_shopping(self) -> None:
         self.click(self.CONTINUE_SHOPPING_BUTTON)
@@ -39,8 +46,10 @@ class CartPage(BasePage):
         return self.get_elements_count(self.CART_ITEM)
 
     def get_product_names(self) -> list[str]:
-        elements = self.find_all(self.PRODUCT_NAME)
-        return [element.text for element in elements]
+        return [
+            element.text
+            for element in self.find_all(self.PRODUCT_NAME)
+        ]
 
     def is_product_in_cart(self, product_name: str) -> bool:
         return product_name in self.get_product_names()
