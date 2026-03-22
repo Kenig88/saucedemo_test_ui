@@ -4,6 +4,7 @@ load_dotenv()  # Обычно load_dotenv() кладут не в data-файл, 
 
 from pages.login_page import LoginPage
 from pages.products_page import ProductsPage
+from pages.product_details_page import ProductDetailsPage
 from pages.cart_page import CartPage
 from pages.checkout_info_page import CheckoutInfoPage
 from pages.checkout_overview_page import CheckoutOverviewPage
@@ -55,6 +56,11 @@ def products_page(browser_fixture):
 
 
 @pytest.fixture()
+def product_details_page(browser_fixture):
+    return ProductDetailsPage(browser_fixture)
+
+
+@pytest.fixture()
 def cart_page(browser_fixture):
     return CartPage(browser_fixture)
 
@@ -78,4 +84,4 @@ def checkout_complete_page(browser_fixture):
 @pytest.fixture()
 def login(login_page):
     login_page.open()
-    login_page.login(username=Username.STANDARD_USER, password=Password.SECRET_SAUCE)
+    login_page.user_input(username=Username.STANDARD_USER, password=Password.SECRET_SAUCE)

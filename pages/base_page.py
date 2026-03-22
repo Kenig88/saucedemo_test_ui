@@ -1,8 +1,6 @@
 from typing import Tuple
-
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-
 
 Locator = Tuple[str, str]
 

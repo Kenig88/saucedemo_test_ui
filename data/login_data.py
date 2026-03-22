@@ -9,13 +9,11 @@ class Username:
     ERROR_USER = os.getenv("ERROR_USER")
     VISUAL_USER = os.getenv("VISUAL_USER")
     INVALID_LOGIN = os.getenv("INVALID_LOGIN")
-    EMPTY = os.getenv("EMPTY")
 
 
 class Password:
     SECRET_SAUCE = os.getenv("SECRET_SAUCE")
     INVALID_PASSWORD = os.getenv("INVALID_PASSWORD")
-    EMPTY = os.getenv("EMPTY")
 
 
 class ErrorMessages:
