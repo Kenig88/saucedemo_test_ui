@@ -1,6 +1,8 @@
 import pytest
 import allure
 
+from data.products_data import ProductNames
+
 
 @allure.feature("Cart Page")
 @pytest.mark.regression
@@ -12,18 +14,16 @@ class TestCartPage:
     @pytest.mark.parametrize(
         "product_name",
         [
-            "Sauce Labs Backpack",
-            "Test.allTheThings() T-Shirt (Red)",
+            ProductNames.BACKPACK,
+            ProductNames.RED_TSHIRT,
         ],
         ids=[
             "popular-product",
             "edge-case-product-name",
         ]
     )
-    def test_user_sees_added_product_in_cart(self, login, products_page, cart_page, product_name):
-        products_page.is_opened()
-        products_page.add_to_cart(product_name)
-        products_page.click_open_cart()
+    def test_user_sees_added_product_in_cart(self, opened_cart_page_with_product, product_name, cart_page):
+        cart_page = opened_cart_page_with_product(product_name)
         title = cart_page.is_opened()
         assert title == "Your Cart"
         assert cart_page.is_product_in_cart(product_name)
@@ -34,18 +34,16 @@ class TestCartPage:
     @pytest.mark.parametrize(
         "product_name",
         [
-            "Sauce Labs Backpack",
-            "Test.allTheThings() T-Shirt (Red)",
+            ProductNames.BACKPACK,
+            ProductNames.RED_TSHIRT,
         ],
         ids=[
             "popular-product",
             "edge-case-product-name",
         ]
     )
-    def test_user_can_remove_product_from_cart(self, login, products_page, cart_page, product_name):
-        products_page.is_opened()
-        products_page.add_to_cart(product_name)
-        products_page.click_open_cart()
+    def test_user_can_remove_product_from_cart(self, opened_cart_page_with_product, product_name, cart_page):
+        cart_page = opened_cart_page_with_product(product_name)
         title = cart_page.is_opened()
         assert title == "Your Cart"
         assert cart_page.is_product_in_cart(product_name)
@@ -57,16 +55,11 @@ class TestCartPage:
     @allure.title("Пользователь может перейти к оформлению заказа")
     @allure.severity(allure.severity_level.CRITICAL)
     def test_user_can_go_to_checkout_from_cart(
-        self,
-        login,
-        products_page,
-        cart_page,
-        checkout_info_page
-    ):
-        product_name = "Sauce Labs Bike Light"
-        products_page.is_opened()
-        products_page.add_to_cart(product_name)
-        products_page.click_open_cart()
+            self,
+            opened_cart_page_with_product,
+            checkout_info_page
+            , cart_page):
+        cart_page = opened_cart_page_with_product(ProductNames.BIKE_LIGHT)
         title = cart_page.is_opened()
         assert title == "Your Cart"
         cart_page.click_checkout()
@@ -75,9 +68,8 @@ class TestCartPage:
     @allure.story("Возврат к товарам")
     @allure.title("Пользователь может вернуться к списку товаров")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_user_can_return_to_products_from_cart(self, login, products_page, cart_page):
-        products_page.is_opened()
-        products_page.click_open_cart()
+    def test_user_can_return_to_products_from_cart(self, opened_cart_page, products_page, cart_page):
+        cart_page = opened_cart_page
         title = cart_page.is_opened()
         assert title == "Your Cart"
         cart_page.click_continue_shopping()
@@ -89,8 +81,8 @@ class TestCartPage:
     @pytest.mark.parametrize(
         "product_name",
         [
-            "Sauce Labs Backpack",
-            "Test.allTheThings() T-Shirt (Red)",
+            ProductNames.BACKPACK,
+            ProductNames.RED_TSHIRT,
         ],
         ids=[
             "popular-product",
@@ -98,16 +90,12 @@ class TestCartPage:
         ]
     )
     def test_user_can_open_product_details_from_cart(
-        self,
-        login,
-        products_page,
-        cart_page,
-        product_details_page,
-        product_name
-    ):
-        products_page.is_opened()
-        products_page.add_to_cart(product_name)
-        products_page.click_open_cart()
+            self,
+            opened_cart_page_with_product,
+            product_details_page,
+            product_name
+            , cart_page):
+        cart_page = opened_cart_page_with_product(product_name)
         title = cart_page.is_opened()
         assert title == "Your Cart"
         assert cart_page.is_product_in_cart(product_name)
