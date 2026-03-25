@@ -5,14 +5,11 @@ from pages.base_page import BasePage
 
 class CheckoutInfoPage(BasePage):
     TITLE = (By.XPATH, "//span[text()='Checkout: Your Information']")
-
     FIRST_NAME_INPUT = (By.ID, "first-name")
     LAST_NAME_INPUT = (By.ID, "last-name")
     POSTAL_CODE_INPUT = (By.ID, "postal-code")
-
     CONTINUE_BUTTON = (By.ID, "continue")
     CANCEL_BUTTON = (By.ID, "cancel")
-
     ERROR_MESSAGE = (By.CSS_SELECTOR, "h3[data-test='error']")
 
     def __init__(self, driver):
@@ -30,7 +27,7 @@ class CheckoutInfoPage(BasePage):
     def enter_postal_code(self, postal_code: str) -> None:
         self.enter_text(self.POSTAL_CODE_INPUT, postal_code)
 
-    def fill_checkout_form(self, first_name: str, last_name: str, postal_code: str) -> None:
+    def enter_checkout_form(self, first_name: str, last_name: str, postal_code: str) -> None:
         self.enter_first_name(first_name)
         self.enter_last_name(last_name)
         self.enter_postal_code(postal_code)

@@ -72,9 +72,9 @@ def products_page(browser_fixture):
 
 
 # Возвращает PageObject страницы деталей товара
-@pytest.fixture()
-def product_details_page(browser_fixture):
-    return ProductDetailsPage(browser_fixture)
+# @pytest.fixture()
+# def product_details_page(browser_fixture):
+#     return ProductDetailsPage()
 
 
 # Возвращает PageObject страницы корзины
@@ -101,104 +101,53 @@ def checkout_complete_page(browser_fixture):
     return CheckoutCompletePage(browser_fixture)
 
 
+# =========================
+# фикстуры действий
+# =========================
+
 # Выполняет логин пользователя
 @pytest.fixture()
-def login(login_page):
+def opened_products_page_after_login(login_page, products_page):
     login_page.open()
     login_page.user_input(username=Username.STANDARD_USER, password=Password.SECRET_SAUCE)
+    return products_page
 
 
-# Открывает корзину после логина (без добавления товара)
-@pytest.fixture()
-def opened_cart_page(login_page, products_page, cart_page):
-    login_page.open()
-    login_page.user_input(
-        username=Username.STANDARD_USER,
-        password=Password.SECRET_SAUCE
-    )
-    products_page.click_open_cart()
-    return cart_page
-
-
+# отдельная фикстура только для корзины для проверки test_cart_page.py
 # Открывает корзину с добавленным товаром
 @pytest.fixture()
-def opened_cart_page_with_product(login_page, products_page, cart_page):
-    def _open(product_name: str):
-        login_page.open()
-        login_page.user_input(
-            username=Username.STANDARD_USER,
-            password=Password.SECRET_SAUCE
-        )
-        products_page.add_to_cart(product_name)
-        products_page.click_open_cart()
+def product_in_cart_product_name(opened_products_page_after_login, cart_page):
+    def _open(product_name):
+        opened_products_page_after_login.add_to_cart(product_name)
+        opened_products_page_after_login.click_open_cart()
         return cart_page
 
     return _open
 
 
-# Открывает checkout step one (после корзины)
+# Открывает checkout step one (после корзины с дефолтным товаром)
 @pytest.fixture()
-def opened_checkout_info_page(login_page, products_page, cart_page, checkout_info_page):
-    login_page.open()
-    login_page.user_input(
-        username=Username.STANDARD_USER,
-        password=Password.SECRET_SAUCE
-    )
-    products_page.add_to_cart(ProductNames.BACKPACK)
-    products_page.click_open_cart()
+def opened_checkout_info_page(opened_products_page_after_login, cart_page, checkout_info_page):
+    opened_products_page_after_login.add_to_cart(ProductNames.BACKPACK)
+    opened_products_page_after_login.click_open_cart()
     cart_page.click_checkout()
     return checkout_info_page
 
 
 # Открывает checkout overview (после заполнения данных)
 @pytest.fixture()
-def opened_checkout_overview_page(
-    login_page,
-    products_page,
-    cart_page,
-    checkout_info_page,
-    checkout_overview_page,
-):
-    login_page.open()
-    login_page.user_input(
-        username=Username.STANDARD_USER,
-        password=Password.SECRET_SAUCE
+def opened_checkout_overview_page(opened_checkout_info_page, checkout_overview_page):
+    opened_checkout_info_page.enter_checkout_form(
+        first_name=CheckoutInfoData.FIRST_NAME,
+        last_name=CheckoutInfoData.LAST_NAME,
+        postal_code=CheckoutInfoData.POSTAL_CODE
     )
-    products_page.add_to_cart(ProductNames.BACKPACK)
-    products_page.click_open_cart()
-    cart_page.click_checkout()
-    checkout_info_page.fill_checkout_form(
-        CheckoutInfoData.FIRST_NAME,
-        CheckoutInfoData.LAST_NAME,
-        CheckoutInfoData.POSTAL_CODE,
-    )
-    checkout_info_page.click_continue_button()
+    opened_checkout_info_page.click_continue_button()
     return checkout_overview_page
 
 
-# Открывает страницу успешного завершения заказа (после finish)
+# Открывает страницу успешного завершения заказа
 @pytest.fixture()
-def opened_checkout_complete_page(
-    login_page,
-    products_page,
-    cart_page,
-    checkout_info_page,
-    checkout_overview_page,
-    checkout_complete_page,
-):
-    login_page.open()
-    login_page.user_input(
-        username=Username.STANDARD_USER,
-        password=Password.SECRET_SAUCE
-    )
-    products_page.add_to_cart(ProductNames.BACKPACK)
-    products_page.click_open_cart()
-    cart_page.click_checkout()
-    checkout_info_page.fill_checkout_form(
-        CheckoutInfoData.FIRST_NAME,
-        CheckoutInfoData.LAST_NAME,
-        CheckoutInfoData.POSTAL_CODE,
-    )
-    checkout_info_page.click_continue_button()
-    checkout_overview_page.click_finish()
+def opened_checkout_complete_page(opened_checkout_overview_page, checkout_complete_page):
+    opened_checkout_overview_page.click_finish()
     return checkout_complete_page

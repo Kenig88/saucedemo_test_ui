@@ -5,15 +5,15 @@ import allure
 
 
 class LoginPage(BasePage):
-    def __init__(self, driver):
-        super().__init__(driver, url=Links.LOGIN_PAGE)
-
     USERNAME = (By.ID, "user-name")
     PASSWORD = (By.ID, "password")
     LOGIN_BUTTON = (By.ID, "login-button")
     ERROR_MESSAGE = (By.XPATH, "//h3[@data-test='error']")
 
-    def is_opened(self) -> None:
+    def __init__(self, driver):
+        super().__init__(driver, url=Links.LOGIN_PAGE)
+
+    def is_opened(self) -> None:  # применю его в e2e
         self.find(self.USERNAME)
         assert self.driver.current_url == Links.LOGIN_PAGE
 

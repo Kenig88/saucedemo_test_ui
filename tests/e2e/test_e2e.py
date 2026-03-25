@@ -6,7 +6,7 @@ import pytest
 @allure.feature("E2E test.")
 @pytest.mark.e2e
 def test_checkout_flow(
-        login,
+        opened_products_page_after_login,
         products_page,
         cart_page,
 

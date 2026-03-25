@@ -8,7 +8,6 @@ class CheckoutOverviewPage(BasePage):
     FINISH_BUTTON = (By.ID, "finish")
     CANCEL_BUTTON = (By.ID, "cancel")
     CART_ITEM = (By.CLASS_NAME, "cart_item")
-    PRODUCT_NAME = (By.CLASS_NAME, "inventory_item_name")
     TOTAL_PRICE_LABEL = (By.CLASS_NAME, "summary_total_label")
 
     def __init__(self, driver):
@@ -26,14 +25,5 @@ class CheckoutOverviewPage(BasePage):
     def get_products_count(self) -> int:
         return self.get_elements_count(self.CART_ITEM)
 
-    def get_product_names(self) -> list[str]:
-        return [
-            element.text
-            for element in self.find_all(self.PRODUCT_NAME)
-        ]
-
-    def is_product_present(self, product_name: str) -> bool:
-        return product_name in self.get_product_names()
-
-    def get_total_label_text(self) -> str:
-        return self.get_text(self.TOTAL_PRICE_LABEL)
+    def has_any_product(self) -> bool:
+        return self.get_products_count() > 0

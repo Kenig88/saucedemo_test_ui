@@ -15,7 +15,7 @@ class CheckoutCompletePage(BasePage):
     def is_opened(self) -> str:
         return self.assert_page_opened("checkout-complete", self.TITLE)
 
-    def click_back_home(self) -> None:
+    def click_home_button(self) -> None:
         self.click(self.BACK_HOME_BUTTON)
 
     def get_complete_header_text(self) -> str:

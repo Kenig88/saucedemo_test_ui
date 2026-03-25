@@ -6,7 +6,7 @@ Locator = Tuple[str, str]
 
 
 class BasePage:
-    def __init__(self, driver, url: str = "", timeout: int = 10):
+    def __init__(self, driver, url: str, timeout: int = 10):
         self.driver = driver
         self.url = url
         self.wait = WebDriverWait(driver, timeout)
@@ -16,21 +16,19 @@ class BasePage:
     def open(self) -> None:
         """
         Открыть страницу по URL, заданному в Page Object.
-        Используется для стартовых страниц (например, LoginPage).
+        Используется для стартовой страницы (LoginPage).
         """
-        if not self.url:
-            raise ValueError("URL страницы не задан.")
         self.driver.get(self.url)
 
     # --- Page state (проверка состояния страницы) ---
 
     def assert_page_opened(self, url_part: str, title_locator: Locator) -> str:
         """
-        Проверить, что открыта нужная страница:
+        Проверяю, что открыта нужная страница:
         - URL содержит ожидаемую часть
         - ключевой элемент (заголовок) видим
 
-        Возвращает текст заголовка.
+        Метод возвращает текст заголовка.
         """
         element = self.find(title_locator)
         current_url = self.driver.current_url

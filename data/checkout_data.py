@@ -12,6 +12,7 @@ class ErrorMessagesCheckoutInfo:
     EMPTY_LAST_NAME = "Error: Last Name is required"
     EMPTY_POSTAL_CODE = "Error: Postal Code is required"
 
+
 class CheckoutCompleteMessages:
     HEADER = "Thank you for your order!"
     TEXT = "Your order has been dispatched, and will arrive just as fast as the pony can get there!"

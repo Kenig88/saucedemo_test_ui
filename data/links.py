@@ -1,5 +1,3 @@
-
-
 class Links:
     HOST = "https://www.saucedemo.com/"
     LOGIN_PAGE = f"{HOST}"

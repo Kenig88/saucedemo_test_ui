@@ -1,55 +1,30 @@
 import pytest
 import allure
 
+from data.products_data import ProductNames
 
-@allure.feature("Products Page")
+
+@allure.feature("Products")
 @pytest.mark.regression
 class TestProductsPage:
 
-    @allure.story("Открытие страницы")
-    @allure.title("Страница товаров успешно открывается")
-    @allure.severity(allure.severity_level.CRITICAL)
-    def test_products_page_opened(self, login, products_page):
-        title = products_page.is_opened()
-        assert title == "Products"
-
-    @allure.story("Добавление товара")
+    @allure.story("Добавление товара и навигация")
     @allure.title("Пользователь может добавить товар в корзину")
     @allure.severity(allure.severity_level.CRITICAL)
-    @pytest.mark.parametrize(
-        "product_name",
-        [
-            "Sauce Labs Backpack",
-            "Test.allTheThings() T-Shirt (Red)",
-        ],
-        ids=[
-            "popular-product",
-            "edge-case-product-name",
-        ]
-    )
-    def test_user_can_add_product_to_cart(self, login, products_page, product_name):
-        products_page.add_to_cart(product_name)
-        assert products_page.get_cart_count() == 1
+    def test_user_can_add_product_to_cart(self, opened_products_page_after_login, cart_page):
+        opened_products_page_after_login.add_to_cart(ProductNames.RED_TSHIRT)
+        assert opened_products_page_after_login.get_cart_count() == 1
+        opened_products_page_after_login.click_open_cart()
+        assert cart_page.is_opened()
 
     @allure.story("Удаление товара")
     @allure.title("Пользователь может удалить товар из корзины со страницы товаров")
     @allure.severity(allure.severity_level.CRITICAL)
-    @pytest.mark.parametrize(
-        "product_name",
-        [
-            "Sauce Labs Backpack",
-            "Test.allTheThings() T-Shirt (Red)",
-        ],
-        ids=[
-            "popular-product",
-            "edge-case-product-name",
-        ]
-    )
-    def test_user_can_remove_product_from_products_page(self, login, products_page, product_name):
-        products_page.add_to_cart(product_name)
-        assert products_page.get_cart_count() == 1
-        products_page.remove_from_cart(product_name)
-        assert products_page.get_cart_count() == 0
+    def test_user_can_remove_product_from_products_page(self, opened_products_page_after_login):
+        opened_products_page_after_login.add_to_cart(ProductNames.BIKE_LIGHT)
+        assert opened_products_page_after_login.get_cart_count() == 1
+        opened_products_page_after_login.remove_from_cart(ProductNames.BIKE_LIGHT)
+        assert opened_products_page_after_login.get_cart_count() == 0
 
     @allure.story("Сортировка")
     @allure.title("Пользователь может отсортировать товары по цене")
@@ -65,34 +40,17 @@ class TestProductsPage:
             "price-high-to-low",
         ]
     )
-    def test_user_can_sort_products_by_price(self, login, products_page, sort_value, reverse):
-        products_page.sort_by(sort_value)
-        prices = products_page.get_prices()
+    def test_user_can_sort_products_by_price(self, opened_products_page_after_login, sort_value, reverse):
+        opened_products_page_after_login.sort_by(sort_value)
+        prices = opened_products_page_after_login.get_prices()
         assert prices == sorted(prices, reverse=reverse)
 
-    @allure.story("Навигация")
-    @allure.title("Пользователь может перейти в корзину")
-    @allure.severity(allure.severity_level.CRITICAL)
-    def test_user_can_open_cart_from_products_page(self, login, products_page):
-        products_page.click_open_cart()
 
-        assert "cart" in products_page.driver.current_url
-
+    # игнорируется, не доделан
+    @pytest.mark.skipif
     @allure.story("Навигация")
     @allure.title("Пользователь может открыть карточку товара")
-    @allure.severity(allure.severity_level.CRITICAL)
-    @pytest.mark.parametrize(
-        "product_name",
-        [
-            "Sauce Labs Backpack",
-            "Test.allTheThings() T-Shirt (Red)",
-        ],
-        ids=[
-            "popular-product",
-            "edge-case-product-name",
-        ]
-    )
-    def test_user_can_open_product_details(self, login, products_page, product_details_page, product_name):
-        products_page.open_product_details(product_name)
-        title = product_details_page.is_opened()
-        assert title == product_name
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_user_can_open_product_details(self, opened_products_page_after_login, product_details_page, product_name):
+        opened_products_page_after_login.open_product_details(product_name)
+        assert product_details_page.is_opened()

@@ -29,13 +29,6 @@ class CartPage(BasePage):
         button = cart_item.find_element(By.TAG_NAME, "button")
         button.click()
 
-    def open_product_details(self, product_name: str) -> None:
-        locator = (
-            By.XPATH,
-            f"//*[contains(@class, 'inventory_item_name') and normalize-space()='{product_name}']"
-        )
-        self.click(locator)
-
     def click_continue_shopping(self) -> None:
         self.click(self.CONTINUE_SHOPPING_BUTTON)
 
