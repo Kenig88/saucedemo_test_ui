@@ -1,0 +1,32 @@
+version: "3.9"
+
+x-ui-common: &ui-common
+  build: .
+  working_dir: /usr/workspace
+  volumes:
+    - .:/usr/workspace
+  environment:
+    CHROME_BIN: /usr/bin/chromium
+    CHROMEDRIVER_PATH: /usr/bin/chromedriver
+    STANDARD_USER: ${STANDARD_USER:?STANDARD_USER is required}
+    LOCKED_OUT_USER: ${LOCKED_OUT_USER:?LOCKED_OUT_USER is required}
+    PROBLEM_USER: ${PROBLEM_USER:?PROBLEM_USER is required}
+    PERFORMANCE_GLITCH_USER: ${PERFORMANCE_GLITCH_USER:?PERFORMANCE_GLITCH_USER is required}
+    ERROR_USER: ${ERROR_USER:?ERROR_USER is required}
+    VISUAL_USER: ${VISUAL_USER:?VISUAL_USER is required}
+    INVALID_LOGIN: ${INVALID_LOGIN:?INVALID_LOGIN is required}
+    SECRET_SAUCE: ${SECRET_SAUCE:?SECRET_SAUCE is required}
+    INVALID_PASSWORD: ${INVALID_PASSWORD:?INVALID_PASSWORD is required}
+
+services:
+  all:
+    <<: *ui-common
+    command: ["pytest", "-sv", "--alluredir=allure-results", "--clean-alluredir"]
+
+  e2e:
+    <<: *ui-common
+    command: ["pytest", "-sv", "-m", "e2e", "--alluredir=allure-results", "--clean-alluredir"]
+
+  regression:
+    <<: *ui-common
+    command: ["pytest", "-sv", "-m", "regression", "--alluredir=allure-results", "--clean-alluredir"]
