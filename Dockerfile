@@ -32,4 +32,4 @@ RUN python -m pip install --upgrade pip \
 
 COPY . .
 
-CMD ["pytest", "-sv", "--alluredir=allure-results", "--clean-alluredir"]
+CMD ["pytest", "-sv", "-n", "auto", "--alluredir=allure-results", "--clean-alluredir"]

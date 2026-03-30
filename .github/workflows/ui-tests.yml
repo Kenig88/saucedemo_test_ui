@@ -1,0 +1,136 @@
+name: UI Tests + Allure Report
+
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: "Test suite to run"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - e2e
+          - regression
+      workers:
+        description: "xdist workers count"
+        required: true
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - "2"
+          - "3"
+          - "4"
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    env:
+      PYTEST_WORKERS: ${{ github.event.inputs.workers }}
+      STANDARD_USER: ${{ secrets.STANDARD_USER }}
+      LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
+      PROBLEM_USER: ${{ secrets.PROBLEM_USER }}
+      PERFORMANCE_GLITCH_USER: ${{ secrets.PERFORMANCE_GLITCH_USER }}
+      ERROR_USER: ${{ secrets.ERROR_USER }}
+      VISUAL_USER: ${{ secrets.VISUAL_USER }}
+      INVALID_LOGIN: ${{ secrets.INVALID_LOGIN }}
+      SECRET_SAUCE: ${{ secrets.SECRET_SAUCE }}
+      INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create allure-results directory
+        run: mkdir -p allure-results
+
+      - name: Build Docker image
+        run: docker compose build
+
+      - name: Run selected suite
+        id: tests
+        continue-on-error: true
+        run: docker compose run --rm ${{ github.event.inputs.suite }}
+
+      - name: Fix permissions
+        if: always()
+        run: sudo chown -R $USER:$USER allure-results || true
+
+      - name: Upload raw allure-results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Setup Java
+        if: always()
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Cache Allure CLI
+        if: always()
+        uses: actions/cache@v4
+        with:
+          path: /opt/allure
+          key: allure-2.29.1
+
+      - name: Install Allure CLI
+        if: always()
+        run: |
+          if [ ! -x /opt/allure/bin/allure ]; then
+            ALLURE_VERSION=2.29.1
+            curl -L -o allure.tgz https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz
+            tar -xzf allure.tgz
+            sudo mv allure-${ALLURE_VERSION} /opt/allure
+          fi
+          sudo ln -sf /opt/allure/bin/allure /usr/bin/allure
+          allure --version
+
+      - name: Checkout gh-pages for history
+        if: always()
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Restore Allure history
+        if: always()
+        run: |
+          if [ -d "gh-pages/history" ]; then
+            mkdir -p allure-results/history
+            cp -r gh-pages/history/. allure-results/history/ || true
+          fi
+
+      - name: Generate Allure report
+        if: always()
+        run: allure generate allure-results -o allure-report --clean
+
+      - name: Prepare publish directory
+        if: always()
+        run: |
+          mkdir -p allure-history
+          cp -r allure-report/. allure-history/
+          touch allure-history/.nojekyll
+
+      - name: Publish report to gh-pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+
+      - name: Fail workflow if tests failed
+        if: steps.tests.outcome == 'failure'
+        run: exit 1

@@ -8,6 +8,7 @@ x-ui-common: &ui-common
   environment:
     CHROME_BIN: /usr/bin/chromium
     CHROMEDRIVER_PATH: /usr/bin/chromedriver
+    PYTEST_WORKERS: ${PYTEST_WORKERS:-auto}
     STANDARD_USER: ${STANDARD_USER:?STANDARD_USER is required}
     LOCKED_OUT_USER: ${LOCKED_OUT_USER:?LOCKED_OUT_USER is required}
     PROBLEM_USER: ${PROBLEM_USER:?PROBLEM_USER is required}
@@ -21,12 +22,18 @@ x-ui-common: &ui-common
 services:
   all:
     <<: *ui-common
-    command: ["pytest", "-sv", "--alluredir=allure-results", "--clean-alluredir"]
+    command: >
+      sh -c "pytest -sv -n ${PYTEST_WORKERS:-auto}
+      --alluredir=allure-results --clean-alluredir"
 
   e2e:
     <<: *ui-common
-    command: ["pytest", "-sv", "-m", "e2e", "--alluredir=allure-results", "--clean-alluredir"]
+    command: >
+      sh -c "pytest -sv -m e2e -n ${PYTEST_WORKERS:-auto}
+      --alluredir=allure-results --clean-alluredir"
 
   regression:
     <<: *ui-common
-    command: ["pytest", "-sv", "-m", "regression", "--alluredir=allure-results", "--clean-alluredir"]
+    command: >
+      sh -c "pytest -sv -m regression -n ${PYTEST_WORKERS:-auto}
+      --alluredir=allure-results --clean-alluredir"
