@@ -47,10 +47,10 @@ def browser_fixture():
     options.add_argument("--incognito")
     options.add_argument("--window-size=1920,1080")
 
-    # Раскомментировать для Docker и CI:
-    # options.add_argument("--headless=new")
-    # options.add_argument("--disable-dev-shm-usage")
-    # options.add_argument("--no-sandbox")
+    # Для Docker и CI:
+    options.add_argument("--headless=new")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--no-sandbox")
 
     driver = webdriver.Chrome(options=options)
     driver.set_page_load_timeout(20)

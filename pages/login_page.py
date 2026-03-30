@@ -13,9 +13,9 @@ class LoginPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver, url=Links.LOGIN_PAGE)
 
-    def is_opened(self) -> None:  # применю его в e2e
+    def is_opened(self) -> bool:
         self.find(self.USERNAME)
-        assert self.driver.current_url == Links.LOGIN_PAGE
+        return self.driver.current_url == Links.LOGIN_PAGE
 
     def enter_username(self, username: str) -> None:
         self.enter_text(self.USERNAME, username)
@@ -29,7 +29,6 @@ class LoginPage(BasePage):
     def error_message_text(self) -> str:
         return self.get_text(self.ERROR_MESSAGE)
 
-    @allure.step("Ввод логина и пароля")
     def user_input(self, username: str, password: str) -> None:
         self.enter_username(username)
         self.enter_password(password)

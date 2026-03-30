@@ -6,6 +6,7 @@ __pycache__/
 htmlcov/
 dist/
 build/
+*.pyc
 *.egg-info/
 
 # IDE / venv

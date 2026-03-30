@@ -10,7 +10,7 @@ class TestCheckoutOverviewPage:
     @allure.title("Пользователь видит добавленный товар на overview странице")
     @allure.severity(allure.severity_level.CRITICAL)
     def test_user_sees_added_product_on_checkout_overview(self, opened_checkout_overview_page):
-        assert opened_checkout_overview_page.get_products_count() >= 1
+        assert opened_checkout_overview_page.get_products_count() == 1
 
     @allure.story("Успешное завершение заказа")
     @allure.title("Пользователь может завершить checkout с overview страницы")

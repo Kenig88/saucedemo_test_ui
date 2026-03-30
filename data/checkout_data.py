@@ -1,10 +1,7 @@
-import os
-
-
 class CheckoutInfoData:
-    FIRST_NAME = os.getenv("FIRST_NAME")
-    LAST_NAME = os.getenv("LAST_NAME")
-    POSTAL_CODE = os.getenv("POSTAL_CODE")
+    FIRST_NAME = "Bronislav"
+    LAST_NAME = "Vlasov"
+    POSTAL_CODE = "95001"
 
 
 class ErrorMessagesCheckoutInfo:
