@@ -82,16 +82,17 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /opt/allure
-          key: allure-2.29.1
+          key: allure-2.38.1
 
       - name: Install Allure CLI
         if: always()
         run: |
           if [ ! -x /opt/allure/bin/allure ]; then
-            ALLURE_VERSION=2.29.1
-            curl -L -o allure.tgz https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz
+            ALLURE_VERSION=2.38.1
+            curl -fL -o allure.tgz \
+              "https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz"
             tar -xzf allure.tgz
-            sudo mv allure-${ALLURE_VERSION} /opt/allure
+            sudo mv "allure-${ALLURE_VERSION}" /opt/allure
           fi
           sudo ln -sf /opt/allure/bin/allure /usr/bin/allure
           allure --version
