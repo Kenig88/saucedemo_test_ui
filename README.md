@@ -2,9 +2,12 @@
 
 Проект автоматизации UI-тестирования, построенный с использованием:
 
-🐍 Python + Pytest  
-🌐 Selenium WebDriver
-🐳 Docker + Docker Compose  
+🐍 Python + Pytest 
+
+🌐 Selenium WebDriver 
+
+🐳 Docker + Docker Compose 
+
 📊 Allure Report  + GitHub Actions CI
 
 ---
