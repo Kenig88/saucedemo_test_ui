@@ -71,8 +71,16 @@ INVALID_PASSWORD = "___write___your___data___"
 
 # <p align="center"> 🐳 Локальный запуск тестов (через Docker). </p>
 
+Запуск всех тестов: 
+
 ```bash
 docker compose run --rm all
+```
+
+Запуск отдельных наборов тестов:
+
+```bash
+
 docker compose run --rm e2e
 docker compose run --rm regression
 ```
