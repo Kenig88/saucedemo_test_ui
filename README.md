@@ -3,9 +3,9 @@
 Проект автоматизации UI-тестирования, построенный с использованием:
 
 🐍 Python + Pytest  
-🌐 Selenium WebDriver  
-📊 Allure Report  
+🌐 Selenium WebDriver
 🐳 Docker + Docker Compose  
+📊 Allure Report  + GitHub Actions CI
 
 ---
 
@@ -69,7 +69,9 @@ INVALID_PASSWORD = "___write___your___data___"
 # <p align="center"> 🐳 Локальный запуск тестов (через Docker). </p>
 
 ```bash
-docker-compose up --build
+docker compose run --rm all
+docker compose run --rm e2e
+docker compose run --rm regression
 ```
 
 ---
@@ -199,7 +201,7 @@ UI Tests + Allure Report
 ```text
 https://kenig88.github.io/test_selenium_saucedemo/
 ```
-https://<your-username>.github.io/<repository-name>/
+
 ---
 
 # <p align="center"> 📈 История запусков (Allure Trend). </p>
