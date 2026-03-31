@@ -1,7 +1,7 @@
 import pytest
 import allure
 
-from data.checkout_data import CheckoutCompleteMessages
+from config.checkout_data import CheckoutCompleteMessages
 
 
 @allure.feature("Checkout Complete")

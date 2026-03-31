@@ -1,7 +1,7 @@
 import pytest
 import allure
 
-from data.products_data import ProductNames
+from config.products_data import ProductNames
 
 
 @allure.feature("Products")

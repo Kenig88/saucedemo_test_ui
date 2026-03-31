@@ -1,8 +1,8 @@
 import allure
 import pytest
 
-from data.products_data import ProductNames
-from data.checkout_data import CheckoutInfoData, CheckoutCompleteMessages
+from config.products_data import ProductNames
+from config.checkout_data import CheckoutInfoData, CheckoutCompleteMessages
 
 
 @allure.feature("E2E")

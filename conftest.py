@@ -17,9 +17,9 @@ from selenium.webdriver.chrome.service import Service
 import pytest
 import allure
 
-from data.login_data import Username, Password
-from data.products_data import ProductNames
-from data.checkout_data import CheckoutInfoData
+from config.login_data import Username, Password
+from config.products_data import ProductNames
+from config.checkout_data import CheckoutInfoData
 
 
 # Хук для прикрепления скриншота при падении теста (усилил для xdist)
