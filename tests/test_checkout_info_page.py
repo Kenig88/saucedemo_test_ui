@@ -1,7 +1,7 @@
 import pytest
 import allure
 
-from data.checkout_data import CheckoutInfoData, ErrorMessagesCheckoutInfo
+from config.checkout_data import CheckoutInfoData, ErrorMessagesCheckoutInfo
 
 
 @allure.feature("Checkout Step One")

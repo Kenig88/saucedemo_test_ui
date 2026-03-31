@@ -1,7 +1,7 @@
 import pytest
 import allure
 
-from data.login_data import Username, Password, ErrorMessages
+from config.login_data import Username, Password, ErrorMessages
 
 
 @allure.feature("Login")

@@ -71,7 +71,7 @@ class BasePage:
             element.clear()
         element.send_keys(text)
 
-    # --- Get data (получение данных из UI) ---
+    # --- Get config (получение данных из UI) ---
 
     def get_text(self, locator: Locator) -> str:
         """

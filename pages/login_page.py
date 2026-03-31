@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
-from data.links import Links
+from config.links import Links
 import allure
 
 
@@ -8,7 +8,7 @@ class LoginPage(BasePage):
     USERNAME = (By.ID, "user-name")
     PASSWORD = (By.ID, "password")
     LOGIN_BUTTON = (By.ID, "login-button")
-    ERROR_MESSAGE = (By.XPATH, "//h3[@data-test='error']")
+    ERROR_MESSAGE = (By.XPATH, "//h3[@config-test='error']")
 
     def __init__(self, driver):
         super().__init__(driver, url=Links.LOGIN_PAGE)

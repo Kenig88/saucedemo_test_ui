@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from data.links import Links
+from config.links import Links
 from pages.base_page import BasePage
 
 
@@ -10,7 +10,7 @@ class CheckoutInfoPage(BasePage):
     POSTAL_CODE_INPUT = (By.ID, "postal-code")
     CONTINUE_BUTTON = (By.ID, "continue")
     CANCEL_BUTTON = (By.ID, "cancel")
-    ERROR_MESSAGE = (By.CSS_SELECTOR, "h3[data-test='error']")
+    ERROR_MESSAGE = (By.CSS_SELECTOR, "h3[config-test='error']")
 
     def __init__(self, driver):
         super().__init__(driver, url=Links.CHECKOUT_INFO_PAGE)

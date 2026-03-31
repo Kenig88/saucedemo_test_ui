@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
-from data.links import Links
+from config.links import Links
 
 
 class ProductDetailsPage(BasePage):
